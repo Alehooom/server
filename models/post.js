@@ -1,22 +1,27 @@
-module.exports = (sequelize, DataTypes ) => {
-    return sequelize.define('post', {
-        id: {
-            type: DataTypes.INTEGER,
-            primaryKey: true,
-            autoIncrement: true
+module.exports = (sequelize, DataTypes) => {
+  return sequelize.define(
+    "post",
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      title: {
+        type: DataTypes.STRING(100),
+        allowNull: false,
+        validate: {
+          len: [2, 100],
         },
-        title: {
-            type:DataTypes.STRING(100),
-            allowNull: false,
-        },
-        body: {
-            type:DataTypes.TEXT,
-            allowNull: false,
-        },
-        imageUrl: {
-            type: DataTypes.STRING(255) 
-        }
-    }, 
-    {udnerscored: true}
-    );
+      },
+      body: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+      },
+      imageUrl: {
+        type: DataTypes.STRING(255),
+      },
+    },
+    { udnerscored: true },
+  );
 };
