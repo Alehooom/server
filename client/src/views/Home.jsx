@@ -1,5 +1,12 @@
+import PostList from "../components/PostList";
+
 function Home() {
-    return <h>Home</h>;
+  return (
+    <>
+      <h2>Home</h2>
+      <PostList></PostList>
+    </>
+  );
 }
 
 export default Home;
