@@ -1,58 +1,47 @@
 const router = require("express").Router();
-const db = require("../models");
-const validate = require("validate.js");
+const postService = require('../services/postService');
 
-const constraints = {
-  title: {
-    length: {
-      minimum: 2,
-      maximum: 100,
-      tooShort: "^Titeln måste vara minst %{Count} tecken lång.",
-      tooLong: "^Titeln får inte vaara längre än %{count} tecken lång.",
-    },
-  },
-};
+router.post('/id/addComment', (req, res) => {
+    const comment = req.body;
+    const id = req.params.id;
 
-router.get("/", (req, res) => {
-  db.post.findAll().then((result) => {
-    res.send(result);
+  postService.addComment(id, comment).then((result) => {
+    res.status(result.status).json(result.data);
   });
 });
 
-router.post("/", (req, res) => {
-  const post = req.body;
-  const invalidData = validate(post, constraints);
-  if (invalidData) {
-    res.status(400).json(invalidData);
-  } else {
-    db.post.create(post).then((result) => {
-      res.send(result);
-    });
-  }
+router.get('/:id', (req, res) => {
+  const id = req.params.id;
+
+  postService.getById(id).then((result) => {
+    res.status(result.status).json(result.data);
+  });
 });
-router.put("/", (req, res) => {
+
+router.get('/', (req, res) => {
+postService.getAll().then((result) => {
+    res.status(result.status).json(result.data);
+  });
+});
+
+router.post('/', (req, res) => {
   const post = req.body;
-  const invalidData = validate(post, constraints);
+  postService.create(post).then((result) => {
+    res.status(result.status).json(result.data);
+  });
+});
+router.put('/', (req, res) => {
+  const post = req.body;
   const id = post.id;
-  if (invalidData || !id) {
-    res.status(400).json(invalidData || "Id är obligatoriskt.");
-  } else {
-    db.post
-      .update(post, {
-        where: { id: post.id },
-      })
-      .then((result) => {
-        res.send(result);
-      });
-  }
+
+  postService.update(post, id).then((result) => {
+    res.status(result.status).json(result.data);
+  });
 });
-router.delete("/", (req, res) => {
-  db.post
-    .destroy({
-      where: { id: req.body.id },
-    })
-    .then(() => {
-      res.json(`inlägget raderades ${result}`);
-    });
+router.delete('/', (req, res) => {
+    const id = req.body.id;
+    postService.destroy(id).then((result) => {
+    res.status(result.status).json(result.data);
+  });
 });
 module.exports = router;

@@ -31,6 +31,6 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
     },
-    { udnerscored: true },
+    { underscored: true },
   );
 };

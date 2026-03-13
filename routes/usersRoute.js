@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const db = require("../models");
 const validate = require("validate.js");
+const postService = require('../services/postService');
 
 const constraints = {
   email: {
@@ -29,13 +30,21 @@ const constraints = {
   }
 };
 
-router.get("/", (req, res) => {
+router.get('/:id/posts', (req, res) => {
+      const id = req.params.id;
+    
+      postService.getByAuthor(id).then((result) => {
+        res.status(result.status).json(result.data);
+      });
+});
+
+router.get('/', (req, res) => {
   db.user.findAll().then((result) => {
     res.send(result);
   });
 });
 
-router.post("/", (req, res) => {
+router.post('/', (req, res) => {
   const user = req.body;
   const invalidData = validate(user, constraints);
   if (invalidData) {
@@ -46,7 +55,7 @@ router.post("/", (req, res) => {
     });
   }
 });
-router.put("/", (req, res) => {
+router.put('/', (req, res) => {
   const user = req.body;
   const invalidData = validate(user, constraints);
   const id = user.id;
@@ -71,4 +80,5 @@ router.delete("/", (req, res) => {
       res.json(`inlägget raderades ${result}`);
     });
 });
+
 module.exports = router;

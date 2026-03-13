@@ -1,17 +1,22 @@
 const router = require("express").Router();
 const db = require("../models");
-const validate = require("validate.js");
+const postService = require('../services/postService');
 
+router.get('/:id/posts', (req, res) => {
+    const id = req.params.id;
+  
+    postService.getByTag(id).then((result) => {
+      res.status(result.status).json(result.data);
+    });
+});
 
-
-router.get("/", (req, res) => {
+router.get('/', (req, res) => {
   db.tag.findAll().then((result) => {
     res.send(result);
   });
 });
 
-
-router.post("/", (req, res) => {
+router.post('/', (req, res) => {
   const tag = req.body;
 
     db.tag.create(tag).then((result) => {
@@ -19,7 +24,7 @@ router.post("/", (req, res) => {
     });
 });
 
-router.delete("/", (req, res) => {
+router.delete('/', (req, res) => {
   db.tag
     .destroy({
       where: { id: req.body.id },
@@ -28,4 +33,5 @@ router.delete("/", (req, res) => {
       res.json(`inlägget raderades ${result}`);
     });
 });
+
 module.exports = router;
