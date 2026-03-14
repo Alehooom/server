@@ -11,7 +11,7 @@ function App() {
               <Link to="/">Blogg</Link>
             </Typography>
             <Button color="inherit">
-              <Link to="/post/new">Skapa inlägg</Link>
+              <Link to="/posts/new">Skapa inlägg</Link>
             </Button>
           </Toolbar>
         </AppBar>
